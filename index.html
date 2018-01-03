@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>Introducción a Django</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css">
@@ -24,8 +24,64 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section>
+					<h1>Introducción a Django</h1>
+					<h4><a href="http://www.djangoproject.com">www.djangoproject.com</a></h4>
+				</section>
+
+				<section>
+					<h2>¿Qué es Django?</h2>
+					<h4 class="fragment fade-up">Django es...</h4>
+					<p class="fragment fade-up">un framework web desarrollado en python.</p>
+					<p class="fragment fade-up">rápido</p>
+					<p class="fragment fade-up">seguro</p>
+					<p class="fragment fade-up">escalable</p>
+				</section>
+				
+				<section>
+					<section><h2>Requerimientos</h2></section>
+					<section>
+						<h3>Python 3.5 o superior</h3>
+						<p>Descargable desde <a href="https://www.python.org">https://www.python.org</a></p>
+						<p>Se instala junto con pip que es un manejador de paquetes (composer)</p>
+					</section>
+					<section>
+						<h3>Virtualenv</h3>
+						<p>Es un entorno virtual para encapsular proyectos y sus dependencias</p>
+						<p>Se instala con pip (el manejador de paquetes que trae python)</p>
+						<pre><code>pip install virtualenv</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section><h2>Crear un proyecto</h2></section>
+					<section>
+						<h3>Crear el entorno virtual</h3>
+						<pre><code>virtualenv -p ${python_path} .virtualenv --no-site-packages</code></pre>
+						<p>Este comando crea un entorno virtual <code>.virtualenv</code> en la carpeta donde estemos parados</p>
+						<p>El flag <code>--no-site-packages</code> hace que no herede ningún paquete instalado globalmente</p>
+						<p>Virtualenv crea una copia de python que indicamos (podriamos tener distintas versiones) además de otras utilidades como pip</p>
+						<p><small><code>.virtualenv</code> es un nombre arbitrario, podría tener cualquier nombre</small></p>
+						<p><small>Esta carpeta no se versiona</small></p>
+					</section>
+					<section>
+						<h3>Activar el entorno virtual</h3>
+						<p>Windows</p>
+						<pre><code>.virtualenv/Scripts/activate</code></pre>
+						<p>Unix</p>
+						<pre><code>source .virtualenv/bin/activate</code></pre>
+					</section>
+					<section>
+						<h3>Instalación de Django</h3>
+						<pre><code>pip install django</code></pre>
+						<p>Al igual que composer, descarga la última versión y la guarda en la carpeta del virtualenv</p>
+					</section>
+					<section>
+						<h3>Creación de proyecto</h3>
+						<pre><code>django-admin startproject ${nombre} ${directorio}</code></pre>
+						<pre><code>django-admin startproject egosite .</code></pre>
+					</section>
+				</section>
 			</div>
 		</div>
 
