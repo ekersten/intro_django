@@ -31,11 +31,11 @@
 
 				<section>
 					<h2>¿Qué es Django?</h2>
-					<h4 class="fragment fade-up">Django es...</h4>
-					<p class="fragment fade-up">un framework web desarrollado en python.</p>
-					<p class="fragment fade-up">rápido</p>
-					<p class="fragment fade-up">seguro</p>
-					<p class="fragment fade-up">escalable</p>
+					<h4>Django es...</h4>
+					<p>un framework web desarrollado en python.</p>
+					<p>rápido</p>
+					<p>seguro</p>
+					<p>escalable</p>
 				</section>
 				
 				<section>
@@ -80,7 +80,156 @@
 						<h3>Creación de proyecto</h3>
 						<pre><code>django-admin startproject ${nombre} ${directorio}</code></pre>
 						<pre><code>django-admin startproject egosite .</code></pre>
+						<img src="img/screen01.png">
 					</section>
+				</section>
+
+				<section>
+					<section><h2>Primeros pasos</h2></section>
+					<section>
+						<h3>Crear App</h3>
+						<pre><code>manage.py startapp ${nombre_app}</code></pre>
+						<pre><code>manage.py startapp blog</code></pre>
+						<img src="img/screen02.png" alt="">
+					</section>
+					<section>
+						<h3>Activar App</h3>
+						<p>agregar a la lista de INSTALLED_APPS en settings.py</p>
+						<pre>
+							<code data-trim data-noescape>
+								INSTALLED_APPS = [
+									'django.contrib.admin',
+									'django.contrib.auth',
+									'django.contrib.contenttypes',
+									'django.contrib.sessions',
+									'django.contrib.messages',
+									'django.contrib.staticfiles',
+									'blog',
+								]
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Crear Modelos</h3>
+						<p>Se definen dentro del archivo <code>models.py</code></p>
+						<pre class="stretch">
+							<code class="stretch" data-trim data-noescape>
+								class Category(models.Model):
+									name = models.CharField(max_length=100)
+
+								class Article(models.Model):
+									title = models.CharField(max_length=200)
+									subtitle = models.CharField(max_length=200, null=True, blank=True)
+									body = models.TextField()
+									author = models.CharField(max_length=100, null=True, blank=True)
+									publish_datetime = models.DateTimeField()
+									category = models.ForeignKey(
+										Category,
+										related_name='articles',
+										on_delete=models.deletion.CASCADE
+									)
+
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h3>Migraciones</h3>
+						<p>Buscamos modelos sin migrar</p>
+						<pre><code>manage.py makemigrations</code></pre>
+						<p>Ejecutamos las migraciones</p>
+						<pre><code>manage.py migrate</code></pre>
+						<p></p>
+						<p><small>En este caso se creo una base de datos SQLite <code>db.sqlite3</code></small></p>
+					</section>
+					<section>
+						<h3>Administrador</h3>
+						<p>En el archivo <code>admin.py</code></p>
+						<p>Importamos los modelos</p>
+						<pre><code>from .models import Category, Article</code></pre>
+						<p>Los registramos</p>
+						<pre>
+							<code data-trim data-noescape>
+								admin.site.register(Category)
+								admin.site.register(Article)
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h4>Crear super usuario</h4>
+						<pre><code>manage.py createsuperuser</code></pre>
+						<p>Este wizard crea un usuario con permisos de superadmin</p>
+					</section>
+					<section>
+						<h4>Cargar datos en el admin</h4>
+						<p>Primero ejecutamos el servidor de desarrollo</p>
+						<pre><code>manage.py runserver</code></pre>
+						<p>Accedemos al admin <a href="http://localhost:8000/admin">http://localhost:8000/admin</a></p>
+						<p>Ya deberian estar habilitados los modelos que creamos y registramos</p>
+					</section>
+					<section>
+						<h4>Vistas</h4>
+						<p>En el archivo <code>views.py</code> creamos la funcón que será la vista</p>
+						<pre>
+							<code data-trim>
+								from .models import Article
+
+								def index(request):
+									articles = Article.objects.all()
+									context = {
+										'articles': articles
+									}
+									return render(request, 'blog/index.html', context)
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h4>Templates</h4>
+						<p>Creamos el archivo blog/templates/blog/index.html con este código</p>
+						<pre>
+							<code data-trim>
+								{% for article in articles %}
+								<div class="article">
+									<div class="title">{{ article.title }}</div>
+									{% if article.subtitle %}
+									<div class="subtitle">{{ article.subtitle }}</div>
+									{% endif %}
+									<div class="body">{{ article.body }}</div>
+									<div class="footer">
+										Publicado por {{ article.author|default:"Anónimo" }} en {{ article.category.name }} el {{ article.publish_datetime }}
+									</div>
+								</div>
+								{% endfor %}
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h4>URLs (routing)</h4>
+						<p>Agregamos la ruta a nuestra vista en el archivo urls.py del proyecto</p>
+						<pre>
+							<code data-trim>
+								from blog import views as blog_views
+
+								urlpatterns = [
+									path('', blog_views.index),
+									path('admin/', admin.site.urls),
+								]
+							</code>
+						</pre>
+					</section>
+					<section>
+						<p>Podemos ver nuestra vista en <a href="http://localhost:8000">http://localhost:8000</a></p>
+					</section>
+				</section>
+				<section>
+					<h2>Mejoras</h2>
+					<p class="fragment fade-up">Los modelos deberían tener un método de representacion <code>__str__</code></p>
+					<p class="fragment fade-up">En <code>admin.py</code> se pueden agregar funcionalidades extra</p>
+					<p class="fragment fade-up">Las urls deberían pertenecer a la app en vez de estar en el archivo principal</p>
+				</section>
+				<section>
+					<h2>Mas información</h2>
+					<p><a href="http://www.djangoproject.com">Sitio oficial de Django con excelente documentación</a></p>
+					<p><a href="https://djangopackages.org/">Repositorio curado de paquetes para Django. Incluye matrices de paquetes comunes</a></p>
 				</section>
 			</div>
 		</div>

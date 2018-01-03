@@ -11,3 +11,8 @@ node_modules/
 .sass-cache
 css/reveal.min.css
 js/reveal.min.js
+code/.virtualenv
+.vscode
+__pycache__
+*.pyc
+db.sqlite3

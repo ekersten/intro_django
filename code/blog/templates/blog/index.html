@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blog</title>
+</head>
+<body>
+    {% for article in articles %}
+        <div class="article">
+            <div class="title">{{ article.title }}</div>
+            {% if article.subtitle %}
+            <div class="subtitle">{{ article.subtitle }}</div>
+            {% endif %}
+            <div class="body">{{ article.body }}</div>
+            <div class="footer">
+                Publicado por {{ article.author|default:"Anónimo" }} en {{ article.category.name }} el {{ article.publish_datetime }}
+            </div>
+        </div>
+    {% endfor %}
+</body>
+</html>
